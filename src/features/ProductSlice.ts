@@ -70,41 +70,59 @@ const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {},
-
   extraReducers: (builder) => {
     builder
-      // fetch all
+      // fetch all products
       .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
         state.products = action.payload;
       })
-
-      // fetch single
-      .addCase(fetchSingleProduct.fulfilled, (state, action) => {
-        state.singleProduct = action.payload;
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Failed to fetch products";
       })
 
-      // delete
+      // fetch single product
+      .addCase(fetchSingleProduct.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.singleProduct = null;
+      })
+      .addCase(fetchSingleProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.singleProduct = action.payload;
+      })
+      .addCase(fetchSingleProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Failed to fetch product";
+      })
+
+      // delete product
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.products = state.products.filter(
           (p) => p.id !== action.payload
         );
+        if (state.singleProduct?.id === action.payload) {
+          state.singleProduct = null;
+        }
       })
 
       // update product
       .addCase(updateProduct.fulfilled, (state, action) => {
         const updatedProduct = action.payload;
-
         state.products = state.products.map((p) =>
           p.id === updatedProduct.id ? updatedProduct : p
         );
-
-        state.singleProduct = updatedProduct; // update detail page also
+        if (state.singleProduct?.id === updatedProduct.id) {
+          state.singleProduct = updatedProduct;
+        }
       });
   },
 });
+
 
 export default productsSlice.reducer;

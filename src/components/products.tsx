@@ -1,33 +1,17 @@
-import { useEffect, useState } from "react";
-import ProductCard from "./Card";
-
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  category: string;
-  description: string;
-  image: string; 
-}
+import { useEffect } from "react";
+import ProductCard from "./ProductCard";
+import { useAppDispatch, useAppSelector } from "@/hooks/Hook";
+import { fetchProducts, deleteProduct } from "@/features/ProductSlice";
 
 const Products = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const dispatch = useAppDispatch();
+  const { products, loading } = useAppSelector((state) => state.products);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("https://fakestoreapi.com/products");
-        const data: Product[] = await response.json(); 
-        setProducts(data); 
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
-    fetchProducts();
-  }, []);
-
-  console.log(products);
+  if (loading) return <h2>Loading...</h2>;
 
   return (
     <div className="grid grid-cols-4 gap-8">
@@ -38,6 +22,7 @@ const Products = () => {
           title={product.title}
           image={product.image}
           price={product.price}
+        //   onDelete={() => dispatch(deleteProduct(product.id))}
         />
       ))}
     </div>

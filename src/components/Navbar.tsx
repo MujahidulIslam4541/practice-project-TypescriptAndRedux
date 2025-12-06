@@ -69,7 +69,7 @@ const Navbar = () => {
       <div>
         <Button variant="outline" className="flex items-center space-x-1">
           <LogIn className="w-4 h-4" />
-          <span>Sign In</span>
+          <Link to='/signIn'>Sign In</Link>
         </Button>
       </div>
     </div>

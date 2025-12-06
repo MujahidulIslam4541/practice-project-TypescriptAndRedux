@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 
 import { Info, ShoppingCart } from "lucide-react"; 
+import { Link } from "react-router-dom";
 
 interface ProductCardProps {
   id: number;
@@ -29,7 +30,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
       </CardContent>
 
       {/* Title + Price */}
-      <CardHeader className="flex-grow">
+      <CardHeader className="grow">
         <CardTitle className="text-base">{title}</CardTitle>
         <CardDescription className="text-sm">Price: ${price}</CardDescription>
       </CardHeader>
@@ -37,10 +38,10 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
       {/* Buttons stay at the bottom */}
       <CardFooter className="mt-auto">
         <div className="flex gap-3 items-center w-full">
-          <button className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded w-full justify-center">
+          <Link to={`/product/${id}`}  className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded w-full justify-center">
             <Info size={18} />
             Details
-          </button>
+          </Link>
 
           <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded w-full justify-center">
             <ShoppingCart size={18} />
