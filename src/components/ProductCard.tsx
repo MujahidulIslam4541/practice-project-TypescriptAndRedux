@@ -6,9 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import type { AppDispatch } from "@/store/Store";
+import { addToCart } from "@/features/CardSlice";
 
 import { Info, ShoppingCart } from "lucide-react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 interface ProductCardProps {
   id: number;
@@ -18,6 +22,12 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleAddToCard = () => {
+    dispatch(addToCart({ id, title, price, image }));
+    toast.success(`${title} added to cart!`);
+  };
   return (
     <Card className="w-full shadow flex flex-col h-full">
       {/* Image */}
@@ -46,7 +56,10 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
             Details
           </Link>
 
-          <button className="flex items-center gap-2 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded w-full justify-center transition-colors duration-200">
+          <button
+            onClick={handleAddToCard}
+            className="flex items-center gap-2 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded w-full justify-center transition-colors duration-200"
+          >
             <ShoppingCart size={18} />
             AddToCart
           </button>

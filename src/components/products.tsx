@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import ProductCard from "./ProductCard";
 import { useAppDispatch, useAppSelector } from "@/hooks/Hook";
-import { fetchProducts, deleteProduct } from "@/features/ProductSlice";
+import { fetchProducts } from "@/features/ProductSlice";
 import Loading from "./Loading";
 
 const Products = () => {
