@@ -11,6 +11,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Chrome } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -18,17 +20,24 @@ const SignIn = () => {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
+
+    console.log("Login Data:", formData);
+
+    toast.success("Login Successful 🎉Welcome back!");
+
+    navigate("/");
   };
 
   return (
-    <div className="flex justify-center w-[900px] items-center min-h-screen bg-linear-to-br from-gray-100 to-gray-200 px-4">
+    <div className="flex justify-center w-[900px] items-center min-h-screen px-4">
       <Card className="w-full max-w-md shadow-2xl border border-gray-200 rounded-xl">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
@@ -46,8 +55,8 @@ const SignIn = () => {
               </Label>
               <Input
                 id="email"
-                type="email"
-                placeholder="example@gmail.com"
+                type="text"
+                placeholder="Enter Your email"
                 required
                 value={formData.email}
                 onChange={handleChange}
@@ -61,10 +70,7 @@ const SignIn = () => {
                 <Label htmlFor="password" className="font-medium">
                   Password
                 </Label>
-                <a
-                  href="#"
-                  className="text-sm text-blue-600 hover:underline"
-                >
+                <a href="#" className="text-sm text-blue-600 hover:underline">
                   Forgot?
                 </a>
               </div>
@@ -80,7 +86,10 @@ const SignIn = () => {
             </div>
 
             {/* Login Button */}
-            <Button type="submit" className="w-full h-11 text-[16px] bg-amber-200">
+            <Button
+              type="submit"
+              className="w-full h-11 text-[16px] bg-amber-200"
+            >
               Sign In
             </Button>
           </form>
@@ -96,7 +105,7 @@ const SignIn = () => {
             Continue with Google
           </Button>
 
-          {/* Sign Up Text */}
+          {/* Sign Up */}
           <p className="text-sm text-center text-gray-600">
             Don't have an account?{" "}
             <a href="#" className="underline font-medium text-black">

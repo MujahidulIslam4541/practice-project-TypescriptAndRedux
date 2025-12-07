@@ -1,3 +1,4 @@
+// src/features/ProductSlice.ts
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export interface Product {
@@ -66,6 +67,22 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
+// ADD PRODUCT
+export const addProduct = createAsyncThunk(
+  "products/addProduct",
+  async (product: Omit<Product, "id">) => {
+    const res = await fetch("https://fakestoreapi.com/products", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(product),
+    });
+
+    if (!res.ok) throw new Error("Failed to add product");
+
+    return (await res.json()) as Product;
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -120,9 +137,13 @@ const productsSlice = createSlice({
         if (state.singleProduct?.id === updatedProduct.id) {
           state.singleProduct = updatedProduct;
         }
+      })
+
+      // add product
+      .addCase(addProduct.fulfilled, (state, action) => {
+        state.products.push(action.payload);
       });
   },
 });
-
 
 export default productsSlice.reducer;

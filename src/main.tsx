@@ -4,12 +4,15 @@ import "./index.css";
 import App from "./App.tsx";
 import { Provider } from "react-redux";
 import { store } from "./store/Store.ts";
+import  { Toaster } from 'react-hot-toast';
+
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <div className="max-w-7xl mx-auto">
       <Provider store={store}>
-        <App />
+        <Toaster />
+          <App />
       </Provider>
     </div>
   </StrictMode>
