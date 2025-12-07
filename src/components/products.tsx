@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import ProductCard from "./ProductCard";
 import { useAppDispatch, useAppSelector } from "@/hooks/Hook";
 import { fetchProducts, deleteProduct } from "@/features/ProductSlice";
+import Loading from "./Loading";
 
 const Products = () => {
   const dispatch = useAppDispatch();
@@ -11,7 +12,7 @@ const Products = () => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  if (loading) return <h2>Loading...</h2>;
+  if (loading) return <Loading></Loading>;
 
   return (
     <div className="grid grid-cols-4 gap-8">
