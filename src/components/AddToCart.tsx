@@ -67,6 +67,13 @@ const AddToCart = () => {
   return (
     <div className="container mx-auto p-6 max-w-6xl">
       <div className="flex items-center justify-between mb-6">
+        <Button
+          onClick={() => navigate("/")}
+          className="gap-2 bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white"
+        >
+          <Home className="h-4 w-4" />
+          Go to Home
+        </Button>
         <div className="flex items-center gap-3">
           <ShoppingCart className="w-8 h-8 text-blue-600" />
           <h1 className="text-3xl font-bold text-gray-800">Shopping Cart</h1>
@@ -76,17 +83,10 @@ const AddToCart = () => {
             </Badge>
           )}
         </div>
-        <Button 
-          onClick={() => navigate("/")}
-          className="gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white"
-        >
-          <Home className="h-4 w-4" />
-          Go to Home
-        </Button>
       </div>
 
       {cartItems.length === 0 ? (
-        <Card className="text-center py-16 border-2 border-blue-200 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        <Card className="text-center py-16 border-2 border-blue-200 bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50">
           <CardContent className="pt-6">
             <Package className="w-16 h-16 mx-auto mb-4 text-blue-400" />
             <h2 className="text-2xl font-semibold mb-2 text-gray-800">
@@ -102,8 +102,10 @@ const AddToCart = () => {
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <Card className="border-2 border-gray-200 shadow-lg">
-              <CardHeader className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 border-b-2 border-blue-100">
-                <CardTitle className="text-xl text-blue-900">Cart Items</CardTitle>
+              <CardHeader className="bg-linear-to-r from-blue-50 via-indigo-50 to-purple-50 border-b-2 border-blue-100">
+                <CardTitle className="text-xl text-blue-900">
+                  Cart Items
+                </CardTitle>
                 <CardDescription className="text-blue-700">
                   Review your items before checkout
                 </CardDescription>
@@ -112,17 +114,30 @@ const AddToCart = () => {
                 <Table>
                   <TableHeader>
                     <TableRow className="bg-gray-50">
-                      <TableHead className="w-20 font-semibold text-gray-700">Image</TableHead>
-                      <TableHead className="font-semibold text-gray-700">Product</TableHead>
-                      <TableHead className="text-right font-semibold text-gray-700">Price</TableHead>
-                      <TableHead className="text-center font-semibold text-gray-700">Qty</TableHead>
-                      <TableHead className="text-right font-semibold text-gray-700">Total</TableHead>
+                      <TableHead className="w-20 font-semibold text-gray-700">
+                        Image
+                      </TableHead>
+                      <TableHead className="font-semibold text-gray-700">
+                        Product
+                      </TableHead>
+                      <TableHead className="text-right font-semibold text-gray-700">
+                        Price
+                      </TableHead>
+                      <TableHead className="text-center font-semibold text-gray-700">
+                        Qty
+                      </TableHead>
+                      <TableHead className="text-right font-semibold text-gray-700">
+                        Total
+                      </TableHead>
                       <TableHead className="w-20"></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {cartItems.map((item) => (
-                      <TableRow key={item.id} className="hover:bg-blue-50 transition-colors">
+                      <TableRow
+                        key={item.id}
+                        className="hover:bg-blue-50 transition-colors"
+                      >
                         <TableCell>
                           <img
                             src={item.image}
@@ -134,13 +149,15 @@ const AddToCart = () => {
                           {item.title}
                         </TableCell>
                         <TableCell className="text-right text-gray-700">
-                          ${item.price.toFixed(2)}
+                          ${item.price?.toFixed(2)}
                         </TableCell>
                         <TableCell className="text-center">
-                          <Badge className="bg-blue-100 text-blue-800 border border-blue-300">{item.quantity}</Badge>
+                          <Badge className="bg-blue-100 text-blue-800 border border-blue-300">
+                            {item.quantity}
+                          </Badge>
                         </TableCell>
                         <TableCell className="text-right font-semibold text-gray-900">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          ${(item.price * item.quantity)?.toFixed(2)}
                         </TableCell>
                         <TableCell>
                           <AlertDialog>
@@ -153,7 +170,7 @@ const AddToCart = () => {
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </AlertDialogTrigger>
-                            <AlertDialogContent className="bg-gradient-to-br from-red-50 via-rose-50 to-pink-50 border-2 border-red-200">
+                            <AlertDialogContent className="bg-linear-to-br from-red-50 via-rose-50 to-pink-50 border-2 border-red-200">
                               <AlertDialogHeader>
                                 <AlertDialogTitle className="text-xl text-red-900">
                                   Remove item?
@@ -190,7 +207,7 @@ const AddToCart = () => {
                       Clear Cart
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent className="bg-gradient-to-br from-orange-50 via-red-50 to-rose-100 border-2 border-orange-300">
+                  <AlertDialogContent className="bg-linear-to-br from-orange-50 via-red-50 to-rose-100 border-2 border-orange-300">
                     <AlertDialogHeader>
                       <AlertDialogTitle className="text-xl text-red-900">
                         Clear entire cart?
@@ -219,30 +236,37 @@ const AddToCart = () => {
 
           <div className="lg:col-span-1">
             <Card className="sticky top-6 border-2 border-blue-200 shadow-lg">
-              <CardHeader className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 border-b-2 border-blue-100">
-                <CardTitle className="text-xl text-blue-900">Order Summary</CardTitle>
+              <CardHeader className="bg-linear-to-r from-blue-50 via-indigo-50 to-purple-50 border-b-2 border-blue-100">
+                <CardTitle className="text-xl text-blue-900">
+                  Order Summary
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 pt-6">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 font-medium">Subtotal</span>
                   <span className="font-semibold text-gray-900">
-                    ${calculateSubtotal().toFixed(2)}
+                    ${calculateSubtotal()?.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 font-medium">Tax (10%)</span>
                   <span className="font-semibold text-gray-900">
-                    ${calculateTax().toFixed(2)}
+                    ${calculateTax()?.toFixed(2)}
                   </span>
                 </div>
                 <Separator className="bg-blue-200 h-0.5" />
                 <div className="flex justify-between text-lg font-bold bg-blue-50 p-3 rounded-lg">
                   <span className="text-blue-900">Total</span>
-                  <span className="text-blue-900">${calculateTotal().toFixed(2)}</span>
+                  <span className="text-blue-900">
+                    ${calculateTotal()?.toFixed(2)}
+                  </span>
                 </div>
               </CardContent>
               <CardFooter className="flex flex-col gap-3 bg-gray-50 border-t-2 border-gray-200">
-                <Button className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold shadow-md" size="lg">
+                <Button
+                  className="w-full bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold shadow-md"
+                  size="lg"
+                >
                   Proceed to Checkout
                 </Button>
                 <Button className="w-full bg-white border-2 border-blue-300 text-blue-600 hover:bg-blue-50 hover:border-blue-400 font-medium transition-colors">
