@@ -7,40 +7,37 @@ import AddProductModal, {
   type ProductForm,
 } from "@/components/AddProductModal";
 import toast from "react-hot-toast";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { addProduct } from "@/features/ProductSlice";
+import { useAppSelector } from "@/redux/hooks";
 import { Link } from "react-router-dom";
+
+// RTK Query hook import
+import { useAddProductMutation } from "@/redux/endpoints/ProductsApi";
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const dispatch = useAppDispatch();
+
   const cartItems = useAppSelector((state) => state.cart.items);
   const cartCount = cartItems.length;
 
+  const [addProduct] = useAddProductMutation();
+
   const handleAddProduct = async (product: ProductForm): Promise<void> => {
     try {
-      const resultAction = await dispatch(
-        addProduct({
-          title: product.title,
-          price: product.price,
-          category: product.category,
-          description: product.description,
-          image: product.image,
-        })
-      );
+      const result = await addProduct({
+        title: product.title,
+        price: product.price,
+        category: product.category,
+        description: product.description,
+        image: product.image,
+      }).unwrap(); // auto error handling
 
-      // Check if fulfilled
-      if (addProduct.fulfilled.match(resultAction)) {
-        toast.success("Product added successfully!");
-        console.log("Product added successfully:", resultAction.payload);
-      } else {
-        toast.error("Failed to add product!");
-      }
+      toast.success("Product added successfully!");
+      console.log("Product added:", result);
 
       setModalOpen(false);
     } catch (error) {
-      console.error("Error adding product:", error);
-      toast.error("Failed to add product. Try again!");
+      console.error("Add product error:", error);
+      toast.error("Failed to add product! Try again.");
     }
   };
 
@@ -58,7 +55,7 @@ const Home = () => {
             Add Product
           </button>
 
-          {/* Cart Icon with Badge */}
+          {/* Cart Icon */}
           <div className="relative">
             <Link
               to="/addToCart"

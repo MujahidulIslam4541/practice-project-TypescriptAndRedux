@@ -1,18 +1,11 @@
-import { useEffect } from "react";
 import ProductCard from "./ProductCard";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { fetchProducts } from "@/features/ProductSlice";
 import Loading from "./Loading";
+import { useGetProductsQuery } from "@/redux/endpoints/ProductsApi";
 
 const Products = () => {
-  const dispatch = useAppDispatch();
-  const { products, loading } = useAppSelector((state) => state.products);
+  const { data: products, isLoading } = useGetProductsQuery();
 
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
-
-  if (loading) return <Loading></Loading>;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="grid grid-cols-4 gap-8">
@@ -23,7 +16,6 @@ const Products = () => {
           title={product.title}
           image={product.image}
           price={product.price}
-        //   onDelete={() => dispatch(deleteProduct(product.id))}
         />
       ))}
     </div>

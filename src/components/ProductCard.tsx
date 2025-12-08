@@ -1,48 +1,35 @@
 import { useState } from "react";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+  Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  Dialog, DialogContent, DialogDescription, DialogFooter,
+  DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
+
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader,
+  AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import type { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
-import { addToCart } from "@/features/CardSlice";
-import { deleteProduct, updateProduct } from "@/features/ProductSlice";
+import { addToCart } from "@/redux/slices/cartSclice";
+
+import {
+  useUpdateProductMutation,
+  useDeleteProductMutation,
+} from "@/redux/endpoints/ProductsApi";
 
 import { Edit, Trash2, Info, ShoppingCart, MoreVertical } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -56,11 +43,14 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
+
+  // RTK Query Mutations
+  const [updateProduct] = useUpdateProductMutation();
+  const [deleteProduct] = useDeleteProductMutation();
 
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
-  // Update Form Data
   const [updateData, setUpdateData] = useState({
     title,
     price: price.toString(),
@@ -69,18 +59,13 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
     description: "",
   });
 
-  // Handle Add to Cart
+  // ADD TO CART
   const handleAddToCard = () => {
     dispatch(addToCart({ id, title, price, image }));
     toast.success(`${title} added to cart!`);
   };
 
-  // Open update modal
-  const handleUpdateProduct = () => {
-    setIsUpdateModalOpen(true);
-  };
-
-  // File Input → Image Preview
+  // IMAGE PREVIEW
   const handleUpdateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -92,42 +77,34 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
     }));
   };
 
-  // Submit Updated Product
+  // UPDATE PRODUCT (RTK QUERY)
   const handleUpdateSubmit = () => {
-    const updatedProduct = {
+    const payload = {
       id,
-      title: updateData.title,
+      ...updateData,
       price: Number(updateData.price),
-      image: updateData.image,
-      category: updateData.category,
-      description: updateData.description,
     };
 
-    dispatch(updateProduct(updatedProduct))
+    updateProduct(payload)
       .unwrap()
       .then(() => {
         toast.success("Product updated successfully!");
         setIsUpdateModalOpen(false);
       })
-      .catch(() => {
-        toast.error("Failed to update product");
-      });
+      .catch(() => toast.error("Failed to update product"));
   };
 
-  // Delete Product
+  // DELETE PRODUCT (RTK QUERY)
   const handleDelete = () => {
-    dispatch(deleteProduct(id))
+    deleteProduct(id)
       .unwrap()
-      .then(() => {
-        toast.success("Product deleted successfully!");
-      })
-      .catch(() => {
-        toast.error("Failed to delete product");
-      });
+      .then(() => toast.success("Product deleted successfully!"))
+      .catch(() => toast.error("Failed to delete product"));
   };
 
   return (
     <Card className="w-full shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col h-full border-2 border-gray-200 hover:border-blue-300 group">
+
       {/* Image */}
       <div className="relative overflow-hidden">
         <CardContent className="p-0">
@@ -138,125 +115,69 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
           />
         </CardContent>
 
-        {/* Dropdown Menu (Edit + Delete) */}
+        {/* Dropdown Menu */}
         <div className="absolute top-3 right-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                size="icon"
-                className="h-8 w-8 rounded-full bg-white/90 hover:bg-white text-gray-700 shadow-lg backdrop-blur-sm"
-              >
+              <Button size="icon" className="h-8 w-8 rounded-full bg-white/90 hover:bg-white text-gray-700 shadow-lg">
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" className="w-48 bg-red-300 border-none">
-              {/* Update Product */}
-              <Dialog
-                open={isUpdateModalOpen}
-                onOpenChange={setIsUpdateModalOpen}
-              >
+            <DropdownMenuContent align="end" className="w-48">
+
+              {/* UPDATE PRODUCT */}
+              <Dialog open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
                 <DialogTrigger asChild>
                   <DropdownMenuItem
                     onSelect={(e) => e.preventDefault()}
-                    onClick={handleUpdateProduct}
-                    className="cursor-pointer gap-2 text-blue-600 focus:text-blue-700 hover:bg-gray-200"
+                    onClick={() => setIsUpdateModalOpen(true)}
+                    className="cursor-pointer gap-2 text-blue-600 hover:bg-gray-200"
                   >
                     <Edit className="h-4 w-4" /> Update Product
                   </DropdownMenuItem>
                 </DialogTrigger>
 
-                {/* UPDATE MODAL CONTENT */}
-                <DialogContent className="sm:max-w-[550px] bg-white border">
+                <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Edit Product</DialogTitle>
-                    <DialogDescription>
-                      Modify your product details below.
-                    </DialogDescription>
+                    <DialogDescription>Modify product details below.</DialogDescription>
                   </DialogHeader>
 
                   <div className="grid gap-4 py-4">
-                    {/* Preview */}
-                    <div className="flex justify-center">
-                      <img
-                        src={updateData.image}
-                        className="w-32 h-32 object-cover rounded-md shadow"
-                      />
-                    </div>
+                    <img src={updateData.image} className="w-32 h-32 mx-auto rounded shadow" />
 
-                    {/* Title */}
-                    <div className="grid gap-2">
-                      <Label>Title</Label>
-                      <Input
-                        value={updateData.title}
-                        onChange={(e) =>
-                          setUpdateData({
-                            ...updateData,
-                            title: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
+                    <Label>Title</Label>
+                    <Input
+                      value={updateData.title}
+                      onChange={(e) => setUpdateData({ ...updateData, title: e.target.value })}
+                    />
 
-                    {/* Price */}
-                    <div className="grid gap-2">
-                      <Label>Price</Label>
-                      <Input
-                        type="number"
-                        value={updateData.price}
-                        onChange={(e) =>
-                          setUpdateData({
-                            ...updateData,
-                            price: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
+                    <Label>Price</Label>
+                    <Input
+                      value={updateData.price}
+                      type="number"
+                      onChange={(e) => setUpdateData({ ...updateData, price: e.target.value })}
+                    />
 
-                    {/* Image Upload */}
-                    <div className="grid gap-2">
-                      <Label>Product Image</Label>
-                      <Input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleUpdateImage}
-                      />
-                    </div>
+                    <Label>Image</Label>
+                    <Input type="file" accept="image/*" onChange={handleUpdateImage} />
 
-                    {/* Category */}
-                    <div className="grid gap-2">
-                      <Label>Category</Label>
-                      <Input
-                        value={updateData.category}
-                        onChange={(e) =>
-                          setUpdateData({
-                            ...updateData,
-                            category: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
+                    <Label>Category</Label>
+                    <Input
+                      value={updateData.category}
+                      onChange={(e) => setUpdateData({ ...updateData, category: e.target.value })}
+                    />
 
-                    {/* Description */}
-                    <div className="grid gap-2">
-                      <Label>Description</Label>
-                      <Textarea
-                        value={updateData.description}
-                        onChange={(e) =>
-                          setUpdateData({
-                            ...updateData,
-                            description: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
+                    <Label>Description</Label>
+                    <Textarea
+                      value={updateData.description}
+                      onChange={(e) => setUpdateData({ ...updateData, description: e.target.value })}
+                    />
                   </div>
 
                   <DialogFooter>
-                    <Button
-                      variant="outline"
-                      onClick={() => setIsUpdateModalOpen(false)}
-                    >
+                    <Button variant="outline" onClick={() => setIsUpdateModalOpen(false)}>
                       Cancel
                     </Button>
                     <Button onClick={handleUpdateSubmit}>Save Changes</Button>
@@ -277,17 +198,17 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
                   </DropdownMenuItem>
                 </AlertDialogTrigger>
 
-                <AlertDialogContent className="bg-linear-to-br from-red-50 via-rose-50 to-pink-50 border-2 border-red-200">
+                <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle className="text-xl text-red-900">Delete Product?</AlertDialogTitle>
-                    <AlertDialogDescription className="text-red-700">
+                    <AlertDialogTitle>Delete Product?</AlertDialogTitle>
+                    <AlertDialogDescription>
                       Are you sure you want to delete "{title}"?
                     </AlertDialogDescription>
                   </AlertDialogHeader>
 
                   <AlertDialogFooter>
-                    <AlertDialogCancel className="bg-white hover:bg-gray-100 text-gray-800 border-2 border-gray-300">Cancel</AlertDialogCancel>
-                    <AlertDialogAction className="bg-red-600 hover:bg-red-700 text-white" onClick={handleDelete}>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete} className="bg-red-600 text-white">
                       Delete
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -299,21 +220,17 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
 
         {/* Price Badge */}
         <div className="absolute top-3 left-3">
-          <div className="bg-amber-500 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow">
+          <div className="bg-amber-500 text-white px-3 py-1.5 rounded-full text-sm font-bold">
             ${price}
           </div>
         </div>
       </div>
 
-      {/* Title */}
-      <CardHeader className="grow pb-3">
+      <CardHeader>
         <CardTitle className="text-base line-clamp-2">{title}</CardTitle>
-        <CardDescription className="text-sm">
-          Premium Quality Product
-        </CardDescription>
+        <CardDescription className="text-sm">Premium Quality Product</CardDescription>
       </CardHeader>
 
-      {/* Action Buttons */}
       <CardFooter>
         <div className="flex gap-2 w-full">
           <Link to={`/product/${id}`} className="flex-1">
@@ -322,10 +239,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
             </Button>
           </Link>
 
-          <Button
-            onClick={handleAddToCard}
-            className="flex-1 gap-2 bg-amber-500 text-white"
-          >
+          <Button onClick={handleAddToCard} className="flex-1 gap-2 bg-amber-500 text-white">
             <ShoppingCart size={16} /> Add to Cart
           </Button>
         </div>

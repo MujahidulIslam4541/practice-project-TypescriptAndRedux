@@ -31,7 +31,7 @@ import {
 import { Trash2, ShoppingCart, Package, Home } from "lucide-react";
 import type { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart, clearCart } from "@/features/CardSlice";
+import { removeFromCart, clearCart } from "@/redux/slices/cartSclice";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
