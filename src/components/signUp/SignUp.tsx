@@ -3,41 +3,72 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Chrome, Mail, Lock, ArrowRight } from "lucide-react";
-import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Chrome, Mail, Lock, ArrowRight, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
-const SignIn = () => {
+const SignUp = () => {
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
   });
-  const navigate=useNavigate()
+
+  const [message, setMessage] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = () => {
-    console.log("Login Data:", formData);
-    toast.success("Login Successful! 🎉");
-    navigate('/')
+    console.log("SignUp Data:", formData);
+    setMessage("Account Created Successfully! 🎉");
+    setTimeout(() => {
+      setMessage("");
+      // navigate('/signin')
+    }, 2000);
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-linear-to-br from-blue-50 via-white to-purple-50 px-4">
+    <div className="flex justify-center items-center min-h-screen bg-linear-to-br from-blue-50 via-white to-purple-50 px-4 py-8">
+      {message && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+          {message}
+        </div>
+      )}
+
       <div className="w-full max-w-md">
         {/* Header Text */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Welcome Back
+            Create Account
           </h1>
-          <p className="text-gray-600">Sign in to continue to your account</p>
+          <p className="text-gray-600">Sign up to get started with us</p>
         </div>
 
         <Card className="border-0 shadow-xl">
           <CardContent className="pt-6">
             <div className="space-y-5">
+              {/* Name */}
+              <div className="space-y-2">
+                <Label
+                  htmlFor="name"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Full Name
+                </Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="John Doe"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="pl-11 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
               {/* Email */}
               <div className="space-y-2">
                 <Label
@@ -61,26 +92,18 @@ const SignIn = () => {
 
               {/* Password */}
               <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <Label
-                    htmlFor="password"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Password
-                  </Label>
-                  <a
-                    href="#"
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
+                <Label
+                  htmlFor="password"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Password
+                </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     id="password"
                     type="password"
-                    placeholder="Enter your password"
+                    placeholder="Create a strong password"
                     value={formData.password}
                     onChange={handleChange}
                     className="pl-11 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
@@ -88,27 +111,31 @@ const SignIn = () => {
                 </div>
               </div>
 
-              {/* Remember Me */}
-              <div className="flex items-center">
+              {/* Terms & Conditions */}
+              <div className="flex items-start">
                 <input
-                  id="remember"
+                  id="terms"
                   type="checkbox"
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  className="w-4 h-4 mt-1 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
-                <label
-                  htmlFor="remember"
-                  className="ml-2 text-sm text-gray-600"
-                >
-                  Remember me for 30 days
+                <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
+                  I agree to the{" "}
+                  <a href="#" className="text-blue-600 hover:underline">
+                    Terms of Service
+                  </a>{" "}
+                  and{" "}
+                  <a href="#" className="text-blue-600 hover:underline">
+                    Privacy Policy
+                  </a>
                 </label>
               </div>
 
-              {/* Sign In Button */}
+              {/* Sign Up Button */}
               <Button
                 onClick={handleSubmit}
                 className="w-full h-12 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
               >
-                Sign In
+                Create Account
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </div>
@@ -122,12 +149,12 @@ const SignIn = () => {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-4 bg-white text-gray-500">
-                  Or continue with
+                  Or sign up with
                 </span>
               </div>
             </div>
 
-            {/* Google Sign In */}
+            {/* Google Sign Up */}
             <Button
               variant="outline"
               className="w-full h-12 flex items-center justify-center gap-3 border-gray-200 hover:bg-gray-50 transition-colors"
@@ -136,14 +163,14 @@ const SignIn = () => {
               <span className="font-medium">Continue with Google</span>
             </Button>
 
-            {/* Sign Up Link */}
+            {/* Sign In Link */}
             <p className="text-center text-sm text-gray-600">
-              Don't have an account?{" "}
+              Already have an account?{" "}
               <Link
-                to='/signUp'
+               to='/signIn'
                 className="text-blue-600 hover:text-blue-700 font-semibold hover:underline"
               >
-                Sign up for free
+                Sign in
               </Link>
             </p>
           </CardFooter>
@@ -151,13 +178,13 @@ const SignIn = () => {
 
         {/* Footer */}
         <p className="text-center text-xs text-gray-500 mt-8">
-          By signing in, you agree to our{" "}
+          Protected by reCAPTCHA and subject to the Google{" "}
           <a href="#" className="underline hover:text-gray-700">
-            Terms
+            Privacy Policy
           </a>{" "}
           and{" "}
           <a href="#" className="underline hover:text-gray-700">
-            Privacy Policy
+            Terms of Service
           </a>
         </p>
       </div>
@@ -165,4 +192,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;

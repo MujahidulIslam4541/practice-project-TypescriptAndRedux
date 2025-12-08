@@ -51,11 +51,11 @@ const AddProductModal = ({ isOpen, onClose }: AddProductModalProps) => {
 
     const newProduct = {
       ...formData,
-      id: Date.now(), 
+      id: Date.now(),
     };
 
     const saved = JSON.parse(localStorage.getItem("localProducts") || "[]");
-console.log("added new data ",newProduct);
+    console.log("added new data ", newProduct);
     localStorage.setItem(
       "localProducts",
       JSON.stringify([newProduct, ...saved])

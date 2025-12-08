@@ -4,6 +4,7 @@ import SingIn from "@/components/signIn/SignIn";
 import ProductDetails from "@/components/ProductDetails";
 import AddToCart from "./components/AddToCart";
 import Error from "./pages/error/Error";
+import SignUp from "./components/signUp/SignUp";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           ></Route>
           <Route path="/addToCart" element={<AddToCart></AddToCart>}></Route>
           <Route path="/signIn" element={<SingIn></SingIn>}></Route>
+          <Route path="/signUp" element={<SignUp></SignUp>}></Route>
         </Routes>
       </div>
     </Router>
