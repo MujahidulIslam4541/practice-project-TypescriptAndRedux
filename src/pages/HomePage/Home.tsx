@@ -7,7 +7,7 @@ import AddProductModal, {
   type ProductForm,
 } from "@/components/AddProductModal";
 import toast from "react-hot-toast";
-import { useAppDispatch, useAppSelector } from "@/hooks/Hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addProduct } from "@/features/ProductSlice";
 import { Link } from "react-router-dom";
 

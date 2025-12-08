@@ -39,7 +39,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import type { AppDispatch } from "@/store/Store";
+import type { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/features/CardSlice";
 import { deleteProduct, updateProduct } from "@/features/ProductSlice";
@@ -150,7 +150,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
               </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuContent align="end" className="w-48 bg-red-300 border-none">
               {/* Update Product */}
               <Dialog
                 open={isUpdateModalOpen}
@@ -277,17 +277,17 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
                   </DropdownMenuItem>
                 </AlertDialogTrigger>
 
-                <AlertDialogContent>
+                <AlertDialogContent className="bg-linear-to-br from-red-50 via-rose-50 to-pink-50 border-2 border-red-200">
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Product?</AlertDialogTitle>
-                    <AlertDialogDescription>
+                    <AlertDialogTitle className="text-xl text-red-900">Delete Product?</AlertDialogTitle>
+                    <AlertDialogDescription className="text-red-700">
                       Are you sure you want to delete "{title}"?
                     </AlertDialogDescription>
                   </AlertDialogHeader>
 
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete}>
+                    <AlertDialogCancel className="bg-white hover:bg-gray-100 text-gray-800 border-2 border-gray-300">Cancel</AlertDialogCancel>
+                    <AlertDialogAction className="bg-red-600 hover:bg-red-700 text-white" onClick={handleDelete}>
                       Delete
                     </AlertDialogAction>
                   </AlertDialogFooter>

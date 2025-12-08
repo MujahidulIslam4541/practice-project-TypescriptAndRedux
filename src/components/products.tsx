@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import ProductCard from "./ProductCard";
-import { useAppDispatch, useAppSelector } from "@/hooks/Hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProducts } from "@/features/ProductSlice";
 import Loading from "./Loading";
 

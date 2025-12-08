@@ -29,7 +29,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Trash2, ShoppingCart, Package, Home } from "lucide-react";
-import type { AppDispatch, RootState } from "@/store/Store";
+import type { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart, clearCart } from "@/features/CardSlice";
 import toast from "react-hot-toast";

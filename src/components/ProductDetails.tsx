@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSingleProduct } from "@/features/ProductSlice";
-import type { AppDispatch, RootState } from "@/store/Store";
+import type { AppDispatch, RootState } from "@/redux/store";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
