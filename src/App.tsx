@@ -7,7 +7,7 @@ import AddToCart from "./components/AddToCart";
 export default function App() {
   return (
     <Router>
-      <div className="flex  max-w-7x mx-auto">
+      <div className="max-w-7x mx-auto">
         <Routes>
           <Route path="/" element={<Home></Home>}></Route>
           <Route path="/product/:id" element={<ProductDetails></ProductDetails>}></Route>

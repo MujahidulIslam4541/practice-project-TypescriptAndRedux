@@ -9,7 +9,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-[1440px] mx-auto">
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <Toaster />

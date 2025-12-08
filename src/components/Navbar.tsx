@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -8,71 +7,89 @@ import {
   NavigationMenuContent,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
-import { Home, Info, Box, LogIn } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Box, LogIn } from "lucide-react";
 
 const Navbar = () => {
   return (
-    <div className="flex w-[1250px] items-center justify-between px-6 py-4 bg-white shadow-md">
-      {/* Left side */}
-      <div className="flex items-center space-x-4">
-        {/* Product Icon */}
-        <Box className="w-6 h-6 text-blue-500" />
+    <nav className="w-full border-b border-gray-100 bg-white">
+      <div className="max-w-7xl mx-auto px-8 py-4">
+        <div className="flex items-center justify-between">
+          {/* Left side - Logo & Nav */}
+          <div className="flex items-center gap-12">
+            {/* Logo */}
+            <a href="/" className="flex items-center gap-2 group">
+              <Box className="w-5 h-5 text-gray-900 group-hover:text-blue-600 transition-colors" />
+              <span className="font-semibold text-lg text-gray-900">Brand</span>
+            </a>
 
-        {/* Navigation Menu */}
-        <NavigationMenu>
-          <NavigationMenuList className="flex space-x-2">
-            {/* Home */}
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link to="/" className="flex items-center space-x-1 px-3 py-2 rounded-md hover:bg-gray-100">
-                  <Home className="w-4 h-4" />
-                  <span>Home</span>
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
+            {/* Navigation Menu */}
+            <NavigationMenu>
+              <NavigationMenuList className="flex gap-1">
+                {/* Home */}
+                <NavigationMenuItem>
+                  <NavigationMenuLink asChild>
+                    <a
+                      href="/"
+                      className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                    >
+                      Home
+                    </a>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
 
-            {/* About */}
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link to="/about" className="flex items-center space-x-1 px-3 py-2 rounded-md hover:bg-gray-100">
-                  <Info className="w-4 h-4" />
-                  <span>About</span>
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
+                {/* About */}
+                <NavigationMenuItem>
+                  <NavigationMenuLink asChild>
+                    <a
+                      href="/about"
+                      className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                    >
+                      About
+                    </a>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
 
-            {/* Product Dropdown */}
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className="flex items-center space-x-1 px-3 py-2 rounded-md hover:bg-gray-100">
-                <Box className="w-4 h-4" />
-                <span>Product</span>
-              </NavigationMenuTrigger>
-              <NavigationMenuContent className="md:min-w-[180px] bg-white border rounded-md shadow-md p-2">
-                <NavigationMenuLink asChild>
-                  <Link to="/product/product1" className="block px-3 py-2 rounded-md hover:bg-gray-100">
-                    Product 1
-                  </Link>
-                </NavigationMenuLink>
-                <NavigationMenuLink asChild>
-                  <Link to="/product/product2" className="block px-3 py-2 rounded-md hover:bg-gray-100">
-                    Product 2
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
+                {/* Product Dropdown */}
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 bg-transparent hover:bg-transparent data-[state=open]:bg-transparent transition-colors">
+                    Product
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent className="min-w-[200px] bg-white border border-gray-100 rounded-lg shadow-lg p-2 mt-2">
+                    <NavigationMenuLink asChild>
+                      <a
+                        href="/product/product1"
+                        className="block px-4 py-2.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                      >
+                        Product 1
+                      </a>
+                    </NavigationMenuLink>
+                    <NavigationMenuLink asChild>
+                      <a
+                        href="/product/product2"
+                        className="block px-4 py-2.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                      >
+                        Product 2
+                      </a>
+                    </NavigationMenuLink>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
+
+          {/* Right side - Sign In */}
+          <a href="/signIn">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+            >
+              <LogIn className="w-4 h-4" />
+              <span className="text-sm font-medium">Sign In</span>
+            </Button>
+          </a>
+        </div>
       </div>
-
-      {/* Right side */}
-      <div>
-        <Button variant="outline" className="flex items-center space-x-1">
-          <LogIn className="w-4 h-4" />
-          <Link to='/signIn'>Sign In</Link>
-        </Button>
-      </div>
-    </div>
+    </nav>
   );
 };
 

@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import toast from "react-hot-toast";
 
 // src/types.ts
 export interface ProductForm {
@@ -47,7 +48,7 @@ const AddProductModal = ({ isOpen, onClose, onAdd }: AddProductModalProps) => {
 
   const handleAdd = () => {
     if (!formData.image || !formData.title) {
-      alert("Please provide at least a title and an image URL.");
+      toast.error("Please provide at least a title and an image URL.");
       return;
     }
 
