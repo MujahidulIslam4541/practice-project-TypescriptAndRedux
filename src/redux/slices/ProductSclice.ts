@@ -1,6 +1,6 @@
 
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Product } from "@/redux/endpoints/ProductsApi";
+import type { Product } from "@/redux/endpoints/productApi";
 
 interface ProductState {
   selectedProduct: Product | null;

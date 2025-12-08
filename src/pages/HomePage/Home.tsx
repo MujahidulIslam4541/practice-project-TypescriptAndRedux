@@ -10,8 +10,7 @@ import toast from "react-hot-toast";
 import { useAppSelector } from "@/redux/hooks";
 import { Link } from "react-router-dom";
 
-// RTK Query hook import
-import { useAddProductMutation } from "@/redux/endpoints/ProductsApi";
+import { useAddProductMutation } from "@/redux/endpoints/productApi";
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -29,7 +28,7 @@ const Home = () => {
         category: product.category,
         description: product.description,
         image: product.image,
-      }).unwrap(); // auto error handling
+      }).unwrap(); 
 
       toast.success("Product added successfully!");
       console.log("Product added:", result);
@@ -76,7 +75,7 @@ const Home = () => {
         <AddProductModal
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
-          onAdd={handleAddProduct}
+          // onAdd={handleAddProduct}
         />
       </div>
     </div>

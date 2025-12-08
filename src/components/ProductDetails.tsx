@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import { useGetProductQuery } from "@/redux/endpoints/ProductsApi";
+import { useGetProductQuery } from "@/redux/endpoints/productApi";
 import { addToCart } from "@/redux/slices/cartSclice";
 
 import { Button } from "@/components/ui/button";

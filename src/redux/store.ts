@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import productsReducer from "@/redux/slices/ProductSclice";
 import cartReducer from "@/redux/slices/cartSclice";
 
-import { productApi } from "@/redux/endpoints/ProductsApi";
+import { api } from "@/redux/api"; 
 
 import {
   persistStore,
@@ -17,7 +17,6 @@ import {
 
 import storage from "redux-persist/lib/storage";
 
-// Persist config for cart
 const cartPersistConfig = {
   key: "cart",
   storage,
@@ -29,7 +28,8 @@ export const store = configureStore({
   reducer: {
     products: productsReducer,
     cart: persistedCartReducer,
-    [productApi.reducerPath]: productApi.reducer, 
+
+    [api.reducerPath]: api.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -37,7 +37,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(productApi.middleware), 
+    }).concat(api.middleware), 
 });
 
 export const persistor = persistStore(store);

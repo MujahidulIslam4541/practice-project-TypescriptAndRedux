@@ -1,6 +1,11 @@
 import { useState } from "react";
 import {
-  Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,19 +13,33 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 import {
-  Dialog, DialogContent, DialogDescription, DialogFooter,
-  DialogHeader, DialogTitle, DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader,
-  AlertDialogTitle, AlertDialogTrigger,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
-  DropdownMenuSeparator, DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 import { useDispatch } from "react-redux";
@@ -29,7 +48,7 @@ import { addToCart } from "@/redux/slices/cartSclice";
 import {
   useUpdateProductMutation,
   useDeleteProductMutation,
-} from "@/redux/endpoints/ProductsApi";
+} from "@/redux/endpoints/productApi";
 
 import { Edit, Trash2, Info, ShoppingCart, MoreVertical } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -97,14 +116,14 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
   // DELETE PRODUCT (RTK QUERY)
   const handleDelete = () => {
     deleteProduct(id)
-      .unwrap()
-      .then(() => toast.success("Product deleted successfully!"))
-      .catch(() => toast.error("Failed to delete product"));
+    .unwrap()
+    .then(() => toast.success("Product deleted successfully!"))
+    .catch(() => toast.error("Failed to delete product"));
+    console.log("product deleted",id)
   };
 
   return (
     <Card className="w-full shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col h-full border-2 border-gray-200 hover:border-blue-300 group">
-
       {/* Image */}
       <div className="relative overflow-hidden">
         <CardContent className="p-0">
@@ -119,15 +138,23 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
         <div className="absolute top-3 right-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="icon" className="h-8 w-8 rounded-full bg-white/90 hover:bg-white text-gray-700 shadow-lg">
+              <Button
+                size="icon"
+                className="h-8 w-8 rounded-full bg-white/90 hover:bg-white text-gray-700 shadow-lg"
+              >
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" className="w-48">
-
+            <DropdownMenuContent
+              align="end"
+              className="w-48 bg-linear-to-br from-red-50 via-rose-50 to-pink-50 border-2 border-red-200"
+            >
               {/* UPDATE PRODUCT */}
-              <Dialog open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
+              <Dialog
+                open={isUpdateModalOpen}
+                onOpenChange={setIsUpdateModalOpen}
+              >
                 <DialogTrigger asChild>
                   <DropdownMenuItem
                     onSelect={(e) => e.preventDefault()}
@@ -137,50 +164,108 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
                     <Edit className="h-4 w-4" /> Update Product
                   </DropdownMenuItem>
                 </DialogTrigger>
-
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Edit Product</DialogTitle>
-                    <DialogDescription>Modify product details below.</DialogDescription>
+                <DialogContent className="bg-white/80 backdrop-blur-xl border border-gray-300 shadow-2xl rounded-xl">
+                  <DialogHeader className="text-center pb-2">
+                    <DialogTitle className="text-2xl font-bold text-gray-800">
+                      Edit Product
+                    </DialogTitle>
+                    <DialogDescription className="text-gray-500">
+                      Modify product details below.
+                    </DialogDescription>
                   </DialogHeader>
 
-                  <div className="grid gap-4 py-4">
-                    <img src={updateData.image} className="w-32 h-32 mx-auto rounded shadow" />
-
-                    <Label>Title</Label>
-                    <Input
-                      value={updateData.title}
-                      onChange={(e) => setUpdateData({ ...updateData, title: e.target.value })}
+                  <div className="grid gap-4 py-6">
+                    <img
+                      src={updateData.image}
+                      className="w-36 h-36 mx-auto rounded-lg shadow-md border"
                     />
 
-                    <Label>Price</Label>
-                    <Input
-                      value={updateData.price}
-                      type="number"
-                      onChange={(e) => setUpdateData({ ...updateData, price: e.target.value })}
-                    />
+                    <div className="space-y-1">
+                      <Label className="font-medium text-gray-700">Title</Label>
+                      <Input
+                        value={updateData.title}
+                        className="bg-gray-100 border-gray-300 focus:ring-2 focus:ring-black"
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            title: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
 
-                    <Label>Image</Label>
-                    <Input type="file" accept="image/*" onChange={handleUpdateImage} />
+                    <div className="space-y-1">
+                      <Label className="font-medium text-gray-700">Price</Label>
+                      <Input
+                        value={updateData.price}
+                        type="number"
+                        className="bg-gray-100 border-gray-300 focus:ring-2 focus:ring-black"
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            price: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
 
-                    <Label>Category</Label>
-                    <Input
-                      value={updateData.category}
-                      onChange={(e) => setUpdateData({ ...updateData, category: e.target.value })}
-                    />
+                    <div className="space-y-1">
+                      <Label className="font-medium text-gray-700">Image</Label>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        className="bg-gray-100 border-gray-300"
+                        onChange={handleUpdateImage}
+                      />
+                    </div>
 
-                    <Label>Description</Label>
-                    <Textarea
-                      value={updateData.description}
-                      onChange={(e) => setUpdateData({ ...updateData, description: e.target.value })}
-                    />
+                    <div className="space-y-1">
+                      <Label className="font-medium text-gray-700">
+                        Category
+                      </Label>
+                      <Input
+                        value={updateData.category}
+                        className="bg-gray-100 border-gray-300 focus:ring-2 focus:ring-black"
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            category: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <Label className="font-medium text-gray-700">
+                        Description
+                      </Label>
+                      <Textarea
+                        value={updateData.description}
+                        className="bg-gray-100 border-gray-300 focus:ring-2 focus:ring-black"
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            description: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
 
-                  <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsUpdateModalOpen(false)}>
+                  <DialogFooter className="flex justify-end gap-3">
+                    <Button
+                      variant="outline"
+                      className="border-gray-400 text-gray-700 hover:bg-gray-200"
+                      onClick={() => setIsUpdateModalOpen(false)}
+                    >
                       Cancel
                     </Button>
-                    <Button onClick={handleUpdateSubmit}>Save Changes</Button>
+                    <Button
+                      className="bg-black text-white hover:bg-gray-800"
+                      onClick={handleUpdateSubmit}
+                    >
+                      Save Changes
+                    </Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -198,7 +283,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
                   </DropdownMenuItem>
                 </AlertDialogTrigger>
 
-                <AlertDialogContent>
+                <AlertDialogContent className="bg-linear-to-br from-red-50 via-rose-50 to-pink-50 border-2 border-red-200">
                   <AlertDialogHeader>
                     <AlertDialogTitle>Delete Product?</AlertDialogTitle>
                     <AlertDialogDescription>
@@ -208,7 +293,10 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
 
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete} className="bg-red-600 text-white">
+                    <AlertDialogAction
+                      onClick={handleDelete}
+                      className="bg-red-600 text-white"
+                    >
                       Delete
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -228,7 +316,9 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
 
       <CardHeader>
         <CardTitle className="text-base line-clamp-2">{title}</CardTitle>
-        <CardDescription className="text-sm">Premium Quality Product</CardDescription>
+        <CardDescription className="text-sm">
+          Premium Quality Product
+        </CardDescription>
       </CardHeader>
 
       <CardFooter>
@@ -239,7 +329,10 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
             </Button>
           </Link>
 
-          <Button onClick={handleAddToCard} className="flex-1 gap-2 bg-amber-500 text-white">
+          <Button
+            onClick={handleAddToCard}
+            className="flex-1 gap-2 bg-amber-500 text-white"
+          >
             <ShoppingCart size={16} /> Add to Cart
           </Button>
         </div>

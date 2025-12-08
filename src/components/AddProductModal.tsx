@@ -1,4 +1,3 @@
-// src/components/AddProductModal.tsx
 import { useState } from "react";
 import {
   Dialog,
@@ -12,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
 
-// src/types.ts
 export interface ProductForm {
   image: string;
   title: string;
@@ -24,10 +22,9 @@ export interface ProductForm {
 interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (product: ProductForm) => void;
 }
 
-const AddProductModal = ({ isOpen, onClose, onAdd }: AddProductModalProps) => {
+const AddProductModal = ({ isOpen, onClose }: AddProductModalProps) => {
   const [formData, setFormData] = useState<ProductForm>({
     image: "",
     title: "",
@@ -47,12 +44,26 @@ const AddProductModal = ({ isOpen, onClose, onAdd }: AddProductModalProps) => {
   };
 
   const handleAdd = () => {
-    if (!formData.image || !formData.title) {
-      toast.error("Please provide at least a title and an image URL.");
+    if (!formData.title || !formData.image) {
+      toast.error("Title & Image required!");
       return;
     }
 
-    onAdd(formData);
+    const newProduct = {
+      ...formData,
+      id: Date.now(), 
+    };
+
+    const saved = JSON.parse(localStorage.getItem("localProducts") || "[]");
+
+    localStorage.setItem(
+      "localProducts",
+      JSON.stringify([newProduct, ...saved])
+    );
+
+    window.dispatchEvent(new Event("localProductsUpdated"));
+
+    toast.success("Product added!");
 
     setFormData({
       image: "",
@@ -67,82 +78,57 @@ const AddProductModal = ({ isOpen, onClose, onAdd }: AddProductModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg bg-white shadow-lg rounded-lg">
+      <DialogContent className="bg-gray-200 space-y-2">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-amber-600">
-            Add New Product
-          </DialogTitle>
+          <DialogTitle>Add New Product</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4 mt-2">
-          {/* Title */}
-          <div className="grid gap-2">
-            <Label htmlFor="title">Title</Label>
-            <Input
-              id="title"
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="Product Title"
-            />
+        <div className="space-y-4 mt-4">
+          <div>
+            <Label>Title</Label>
+            <Input id="title" value={formData.title} onChange={handleChange} />
           </div>
 
-          {/* Price */}
-          <div className="grid gap-2">
-            <Label htmlFor="price">Price</Label>
+          <div>
+            <Label>Price</Label>
             <Input
               id="price"
               type="number"
               value={formData.price}
               onChange={handleChange}
-              placeholder="0.00"
             />
           </div>
 
-          {/* Category */}
-          <div className="grid gap-2">
-            <Label htmlFor="category">Category</Label>
+          <div>
+            <Label>Category</Label>
             <Input
               id="category"
               value={formData.category}
               onChange={handleChange}
-              placeholder="Category"
             />
           </div>
 
-          {/* Image URL */}
-          <div className="grid gap-2">
-            <Label htmlFor="image">Image URL</Label>
-            <Input
-              id="image"
-              type="text"
-              value={formData.image}
-              onChange={handleChange}
-              placeholder="https://example.com/image.jpg"
-            />
+          <div>
+            <Label>Image URL</Label>
+            <Input id="image" value={formData.image} onChange={handleChange} />
           </div>
 
-          {/* Description */}
-          <div className="grid gap-2">
-            <Label htmlFor="description">Description</Label>
+          <div>
+            <Label>Description</Label>
             <textarea
               id="description"
+              className="w-full border rounded p-2"
               value={formData.description}
               onChange={handleChange}
-              className="w-full border rounded px-2 py-1 focus:ring-amber-500 focus:border-amber-500"
-              rows={4}
-              placeholder="Product description..."
             />
           </div>
         </div>
 
-        <DialogFooter className="mt-4 flex justify-end gap-2">
-          <Button variant="outline" onClick={onClose} className="border-gray-300">
+        <DialogFooter className="mt-4">
+          <Button variant="outline" onClick={onClose}>
             Close
           </Button>
-          <Button
-            onClick={handleAdd}
-            className="bg-amber-500 hover:bg-amber-600 text-white"
-          >
+          <Button className="bg-amber-500" onClick={handleAdd}>
             Add Product
           </Button>
         </DialogFooter>

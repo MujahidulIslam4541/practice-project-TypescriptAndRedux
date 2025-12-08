@@ -1,4 +1,3 @@
-// src/redux/endpoints/productApi.ts
 import { api } from "../api";
 
 export interface Product {
