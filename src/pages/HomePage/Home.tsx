@@ -75,7 +75,6 @@ const Home = () => {
         <AddProductModal
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
-          // onAdd={handleAddProduct}
         />
       </div>
     </div>

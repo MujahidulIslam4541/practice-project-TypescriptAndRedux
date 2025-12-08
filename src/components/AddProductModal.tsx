@@ -55,7 +55,7 @@ const AddProductModal = ({ isOpen, onClose }: AddProductModalProps) => {
     };
 
     const saved = JSON.parse(localStorage.getItem("localProducts") || "[]");
-
+console.log("added new data ",newProduct);
     localStorage.setItem(
       "localProducts",
       JSON.stringify([newProduct, ...saved])

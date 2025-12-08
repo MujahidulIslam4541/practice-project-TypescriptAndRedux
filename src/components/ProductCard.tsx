@@ -108,6 +108,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
       .unwrap()
       .then(() => {
         toast.success("Product updated successfully!");
+        console.log(payload);
         setIsUpdateModalOpen(false);
       })
       .catch(() => toast.error("Failed to update product"));

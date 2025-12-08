@@ -1,6 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Home from "./pages/HomePage/Home";
-import SingIn from "@/components/SignIn";
+import SingIn from "@/components/signIn/SignIn";
 import ProductDetails from "@/components/ProductDetails";
 import AddToCart from "./components/AddToCart";
 
