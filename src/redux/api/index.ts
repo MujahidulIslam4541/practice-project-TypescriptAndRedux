@@ -5,6 +5,6 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://fakestoreapi.com",
   }),
-  tagTypes: ["Products"],
+  tagTypes: ["Products","auth"],
   endpoints: () => ({}),
 });
