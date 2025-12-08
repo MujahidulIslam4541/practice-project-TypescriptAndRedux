@@ -64,7 +64,6 @@ interface ProductCardProps {
 const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
   const dispatch = useDispatch();
 
-  // RTK Query Mutations
   const [updateProduct] = useUpdateProductMutation();
   const [deleteProduct] = useDeleteProductMutation();
 
@@ -96,7 +95,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
     }));
   };
 
-  // UPDATE PRODUCT (RTK QUERY)
+  // UPDATE PRODUCT
   const handleUpdateSubmit = () => {
     const payload = {
       id,
@@ -108,19 +107,19 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
       .unwrap()
       .then(() => {
         toast.success("Product updated successfully!");
-        console.log(payload);
         setIsUpdateModalOpen(false);
       })
       .catch(() => toast.error("Failed to update product"));
+    console.log("Product updated successfully!", payload);
   };
 
-  // DELETE PRODUCT (RTK QUERY)
+  // DELETE PRODUCT
   const handleDelete = () => {
     deleteProduct(id)
-    .unwrap()
-    .then(() => toast.success("Product deleted successfully!"))
-    .catch(() => toast.error("Failed to delete product"));
-    console.log("product deleted",id)
+      .unwrap()
+      .then(() => toast.success("Product deleted!"))
+      .catch(() => toast.error("Failed to delete product"));
+    console.log("Product Deleted success!", id);
   };
 
   return (
@@ -165,6 +164,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
                     <Edit className="h-4 w-4" /> Update Product
                   </DropdownMenuItem>
                 </DialogTrigger>
+
                 <DialogContent className="bg-white/80 backdrop-blur-xl border border-gray-300 shadow-2xl rounded-xl">
                   <DialogHeader className="text-center pb-2">
                     <DialogTitle className="text-2xl font-bold text-gray-800">
@@ -185,7 +185,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
                       <Label className="font-medium text-gray-700">Title</Label>
                       <Input
                         value={updateData.title}
-                        className="bg-gray-100 border-gray-300 focus:ring-2 focus:ring-black"
+                        className="bg-gray-100 border-gray-300"
                         onChange={(e) =>
                           setUpdateData({
                             ...updateData,
@@ -200,7 +200,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
                       <Input
                         value={updateData.price}
                         type="number"
-                        className="bg-gray-100 border-gray-300 focus:ring-2 focus:ring-black"
+                        className="bg-gray-100 border-gray-300"
                         onChange={(e) =>
                           setUpdateData({
                             ...updateData,
@@ -226,7 +226,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
                       </Label>
                       <Input
                         value={updateData.category}
-                        className="bg-gray-100 border-gray-300 focus:ring-2 focus:ring-black"
+                        className="bg-gray-100 border-gray-300"
                         onChange={(e) =>
                           setUpdateData({
                             ...updateData,
@@ -242,7 +242,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
                       </Label>
                       <Textarea
                         value={updateData.description}
-                        className="bg-gray-100 border-gray-300 focus:ring-2 focus:ring-black"
+                        className="bg-gray-100 border-gray-300"
                         onChange={(e) =>
                           setUpdateData({
                             ...updateData,
@@ -253,16 +253,15 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
                     </div>
                   </div>
 
-                  <DialogFooter className="flex justify-end gap-3">
+                  <DialogFooter>
                     <Button
                       variant="outline"
-                      className="border-gray-400 text-gray-700 hover:bg-gray-200"
                       onClick={() => setIsUpdateModalOpen(false)}
                     >
                       Cancel
                     </Button>
                     <Button
-                      className="bg-black text-white hover:bg-gray-800"
+                      className="bg-black text-white"
                       onClick={handleUpdateSubmit}
                     >
                       Save Changes
@@ -284,7 +283,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
                   </DropdownMenuItem>
                 </AlertDialogTrigger>
 
-                <AlertDialogContent className="bg-linear-to-br from-red-50 via-rose-50 to-pink-50 border-2 border-red-200">
+                <AlertDialogContent className="bg-red-50 border-2 border-red-200">
                   <AlertDialogHeader>
                     <AlertDialogTitle>Delete Product?</AlertDialogTitle>
                     <AlertDialogDescription>
@@ -315,12 +314,15 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
         </div>
       </div>
 
-      <CardHeader>
-        <CardTitle className="text-base line-clamp-2">{title}</CardTitle>
-        <CardDescription className="text-sm">
-          Premium Quality Product
-        </CardDescription>
-      </CardHeader>
+      {/* ⭐ FIXED HEIGHT PART — THIS MAKES BUTTON STAY AT BOTTOM */}
+      <div className="flex-1">
+        <CardHeader>
+          <CardTitle className="text-base line-clamp-2">{title}</CardTitle>
+          <CardDescription className="text-sm">
+            Premium Quality Product
+          </CardDescription>
+        </CardHeader>
+      </div>
 
       <CardFooter>
         <div className="flex gap-2 w-full">
