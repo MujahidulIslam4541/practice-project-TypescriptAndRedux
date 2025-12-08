@@ -160,7 +160,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
                   <DropdownMenuItem
                     onSelect={(e) => e.preventDefault()}
                     onClick={handleUpdateProduct}
-                    className="cursor-pointer gap-2 text-blue-600 focus:text-blue-700"
+                    className="cursor-pointer gap-2 text-blue-600 focus:text-blue-700 hover:bg-gray-200"
                   >
                     <Edit className="h-4 w-4" /> Update Product
                   </DropdownMenuItem>
@@ -271,7 +271,7 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
                 <AlertDialogTrigger asChild>
                   <DropdownMenuItem
                     onSelect={(e) => e.preventDefault()}
-                    className="cursor-pointer gap-2 text-red-600"
+                    className="cursor-pointer gap-2 text-red-600 hover:bg-gray-200"
                   >
                     <Trash2 className="h-4 w-4" /> Delete Product
                   </DropdownMenuItem>
