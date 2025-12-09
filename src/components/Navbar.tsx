@@ -7,9 +7,20 @@ import {
   NavigationMenuContent,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
-import { Box, LogIn } from "lucide-react";
+import { useAppDispatch } from "@/redux/hooks";
+import { removeUserInfo } from "@/redux/slices/authSclice";
+import type { RootState } from "@/redux/store";
+import { Box, LogIn, LogOut } from "lucide-react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  const token = useSelector((state: RootState) => state.auth.token);
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(removeUserInfo());
+  };
   return (
     <nav className="w-full border-b border-gray-100 bg-white">
       <div className="max-w-7xl mx-auto px-8 py-4">
@@ -77,16 +88,26 @@ const Navbar = () => {
             </NavigationMenu>
           </div>
 
-          {/* Right side - Sign In */}
-          <a href="/signIn">
+          {token ? (
             <Button
+              onClick={handleLogout}
               variant="outline"
               className="flex items-center gap-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
             >
-              <LogIn className="w-4 h-4" />
-              <span className="text-sm font-medium">Sign In</span>
+              <LogOut className="w-4 h-4" />
+              <span className="text-sm font-medium">SignOut</span>
             </Button>
-          </a>
+          ) : (
+            <Link to="/signIn">
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+              >
+                <LogIn className="w-4 h-4" />
+                <span className="text-sm font-medium">Sign In</span>
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </nav>

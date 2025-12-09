@@ -42,7 +42,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/redux/slices/cartSclice";
 
 import {
@@ -51,8 +51,9 @@ import {
 } from "@/redux/endpoints/productApi";
 
 import { Edit, Trash2, Info, ShoppingCart, MoreVertical } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import type { RootState } from "@/redux/store";
 
 interface ProductCardProps {
   id: number;
@@ -63,6 +64,8 @@ interface ProductCardProps {
 
 const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
   const dispatch = useDispatch();
+  const token = useSelector((state: RootState) => state.auth.token);
+  const navigate = useNavigate();
 
   const [updateProduct] = useUpdateProductMutation();
   const [deleteProduct] = useDeleteProductMutation();
@@ -79,6 +82,11 @@ const ProductCard = ({ id, title, image, price }: ProductCardProps) => {
 
   // ADD TO CART
   const handleAddToCard = () => {
+    if (!token) {
+      toast.error("Please login first to add to cart!");
+      navigate("/signIn");
+      return;
+    }
     dispatch(addToCart({ id, title, price, image }));
     toast.success(`${title} added to cart!`);
   };
