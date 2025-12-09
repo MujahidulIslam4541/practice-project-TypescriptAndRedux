@@ -27,10 +27,9 @@ const SignIn = () => {
   const handleSubmit = async () => {
     try {
       const res = await loginUser(formData).unwrap();
-
       dispatch(storeUserInfo(res.token));
       toast.success("Login Successful! 🎉");
-      console.log("fromData", formData, "auth token", res.token);
+      
       navigate("/");
     } catch (error) {
       toast.error("Invalid Credentials ❌");
