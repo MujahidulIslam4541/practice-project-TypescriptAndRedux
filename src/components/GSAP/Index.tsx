@@ -1,4 +1,5 @@
-import GsapScrolltrigger from "./GsapScrolltrigger";
+import GsapScrollingTrigger from "./GSAPScrollingTrigger";
+// import GsapScrolltrigger from "./GsapScrolltrigger";
 import GsapStagger from "./Gsapstagger";
 import GsapTo from "./GsapTo";
 
@@ -7,7 +8,8 @@ const GSAP = () => {
     <>
       <GsapTo></GsapTo>
       <GsapStagger></GsapStagger>
-      <GsapScrolltrigger></GsapScrolltrigger>
+      <GsapScrollingTrigger></GsapScrollingTrigger>
+      {/* <GsapScrolltrigger></GsapScrolltrigger> */}
     </>
   );
 };
