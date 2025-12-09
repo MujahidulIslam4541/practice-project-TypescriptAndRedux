@@ -3,31 +3,44 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Chrome, Mail, Lock, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { useUserLoginMutation } from "@/redux/endpoints/authApi";
+import { useAppDispatch } from "@/redux/hooks";
+import { storeUserInfo } from "@/redux/slices/authSclice";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
-  const navigate=useNavigate()
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [loginUser, { isLoading }] = useUserLoginMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    console.log("Login Data:", formData);
-    toast.success("Login Successful! 🎉");
-    navigate('/')
+  const handleSubmit = async () => {
+    try {
+      const res = await loginUser(formData).unwrap();
+
+      dispatch(storeUserInfo(res.token));
+      toast.success("Login Successful! 🎉");
+      console.log("fromData", formData, "auth token", res.token);
+      navigate("/");
+    } catch (error) {
+      toast.error("Invalid Credentials ❌");
+      console.log(error);
+    }
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-linear-to-br from-blue-50 via-white to-purple-50 px-4">
       <div className="w-full max-w-md">
-        {/* Header Text */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Welcome Back
@@ -38,128 +51,55 @@ const SignIn = () => {
         <Card className="border-0 shadow-xl">
           <CardContent className="pt-6">
             <div className="space-y-5">
-              {/* Email */}
+              {/* Username */}
               <div className="space-y-2">
-                <Label
-                  htmlFor="email"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Email Address
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="pl-11 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="Enter Your Username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className="h-12"
+                />
               </div>
 
               {/* Password */}
               <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <Label
-                    htmlFor="password"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Password
-                  </Label>
-                  <a
-                    href="#"
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Enter your password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="pl-11 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
-              </div>
-
-              {/* Remember Me */}
-              <div className="flex items-center">
-                <input
-                  id="remember"
-                  type="checkbox"
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Your password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="h-12"
                 />
-                <label
-                  htmlFor="remember"
-                  className="ml-2 text-sm text-gray-600"
-                >
-                  Remember me for 30 days
-                </label>
               </div>
 
-              {/* Sign In Button */}
               <Button
                 onClick={handleSubmit}
-                className="w-full h-12 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                disabled={isLoading}
+                className="w-full h-12 bg-linear-to-r from-blue-600 to-purple-600 text-white font-semibold"
               >
-                Sign In
+                {isLoading ? "Signing In..." : "Sign In"}
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </div>
           </CardContent>
 
-          <CardFooter className="flex flex-col gap-4 pb-6">
-            {/* Divider */}
-            <div className="relative w-full">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
-            {/* Google Sign In */}
-            <Button
-              variant="outline"
-              className="w-full h-12 flex items-center justify-center gap-3 border-gray-200 hover:bg-gray-50 transition-colors"
-            >
-              <Chrome className="w-5 h-5 text-blue-600" />
-              <span className="font-medium">Continue with Google</span>
-            </Button>
-
-            {/* Sign Up Link */}
-            <p className="text-center text-sm text-gray-600">
+          <CardFooter className="pb-6">
+            <p className="text-center w-full text-sm text-gray-600">
               Don't have an account?{" "}
               <Link
-                to='/signUp'
-                className="text-blue-600 hover:text-blue-700 font-semibold hover:underline"
+                to="/signUp"
+                className="text-blue-600 font-semibold hover:underline"
               >
-                Sign up for free
+                Sign up free
               </Link>
             </p>
           </CardFooter>
         </Card>
-
-        {/* Footer */}
-        <p className="text-center text-xs text-gray-500 mt-8">
-          By signing in, you agree to our{" "}
-          <a href="#" className="underline hover:text-gray-700">
-            Terms
-          </a>{" "}
-          and{" "}
-          <a href="#" className="underline hover:text-gray-700">
-            Privacy Policy
-          </a>
-        </p>
       </div>
     </div>
   );

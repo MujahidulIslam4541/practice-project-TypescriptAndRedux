@@ -3,31 +3,20 @@ import { api } from "../api";
 
 export const authApi = api.injectEndpoints({
   endpoints: (build) => ({
-    // 🔹 USER LOGIN
     userLogin: build.mutation({
       query: (data) => ({
-        url: "/login",
+        url: "/auth/login",
         method: "POST",
-        credentials: "include",
-        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: data.username,
+          password: data.password,
+        }),
       }),
-      invalidatesTags: ["auth"],
-    }),
-
-    // 🔹 USER REGISTRATION
-    userRegister: build.mutation({
-      query: (data) => ({
-        url: "/register",
-        method: "POST",
-        credentials: "include",
-        body: data,
-      }),
-      invalidatesTags: ["auth"],
     }),
   }),
 });
 
-export const {
-  useUserLoginMutation,
-  useUserRegisterMutation,
-} = authApi;
+export const { useUserLoginMutation } = authApi;
