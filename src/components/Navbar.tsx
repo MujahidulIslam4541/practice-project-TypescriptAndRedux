@@ -51,12 +51,12 @@ const Navbar = () => {
                 {/* About */}
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
-                    <a
-                      href="/about"
+                    <Link
+                      to="/GSAP"
                       className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
                     >
-                      About
-                    </a>
+                      GSAP
+                    </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
 

@@ -9,6 +9,7 @@ import AddProductModal, {
 // import toast from "react-hot-toast";
 import { useAppSelector } from "@/redux/hooks";
 import { Link } from "react-router-dom";
+import GsapTo from "@/components/GSAP/GsapTo";
 
 // import { useAddProductMutation } from "@/redux/endpoints/productApi";
 
@@ -71,6 +72,7 @@ const Home = () => {
 
           {/* Products list */}
           <Products />
+
 
           {/* Add Product Modal */}
           <AddProductModal
